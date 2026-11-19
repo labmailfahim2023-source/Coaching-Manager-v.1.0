@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0B0B1A" />
+  <title>Coaching Manager — কোচিং ম্যানেজার</title>
+  <link id="app-favicon" rel="icon" type="image/svg+xml" href="" />
+  <link id="pwa-manifest" rel="manifest" href="" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+      background-color: #0B0B16;
+      color: #F8FAFC;
+      -webkit-tap-highlight-color: transparent;
+      font-feature-settings: "lnum" 1;
+    }
+    .bn-num-fix {
+      font-variant-numeric: lining-nums;
+    }
+    @keyframes floatBird {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+    .splash-bird-anim {
+      animation: floatBird 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col max-w-lg mx-auto bg-[#0B0B16] pb-32 relative selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- ==================== SPLASH SCREEN ==================== -->
+  <div id="splash-screen" onclick="hideSplashScreen()" class="fixed inset-0 z-[100] bg-gradient-to-b from-[#070711] via-[#0E0E22] to-[#0B0B16] flex flex-col items-center justify-between p-8 text-center transition-opacity duration-700 cursor-pointer">
+    <div class="w-full flex justify-end">
+      <button type="button" onclick="hideSplashScreen(); event.stopPropagation();" class="text-xs font-semibold text-slate-400 hover:text-amber-300 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full transition">
+        প্রবেশ করুন →
+      </button>
+    </div>
+
+    <div class="flex flex-col items-center max-w-xs mx-auto space-y-5">
+      <div class="relative w-28 h-28 rounded-3xl overflow-hidden bg-[#0B0B1A] border-2 border-amber-400/50 shadow-[0_0_45px_rgba(245,158,11,0.35)] splash-bird-anim flex items-center justify-center">
+        <img src="LOGO APP.jpg" alt="Logo" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');" />
+        <svg class="hidden w-20 h-20" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M54 56 L30 30 Q36 45 45 58 Z" fill="#F43F5E"/>
+          <path d="M59 58 Q77 36 94 25 Q88 41 70 59 Z" fill="#4F46E5"/>
+          <path d="M61 60 Q81 42 98 34 Q90 48 72 62 Z" fill="#0EA5E9"/>
+          <path d="M34 55 Q42 48 52 54 Q60 60 68 70 Q79 81 91 95 Q75 88 64 78 Q50 75 40 67 Q35 63 34 55 Z" fill="#F59E0B"/>
+        </svg>
+      </div>
+
+      <div class="space-y-1.5">
+        <span class="inline-block text-[10px] font-bold uppercase tracking-[0.22em] text-cyan-400 bg-cyan-500/10 border border-cyan-500/25 px-3 py-1 rounded-full">Smart Education Suite</span>
+        <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-amber-300 via-orange-400 to-cyan-300 bg-clip-text text-transparent">
+          Coaching Manager
+        </h1>
+        <p class="text-xs text-slate-400">শিক্ষার্থী, হাজিরা, রুটিন ও মাসিক ফি ব্যবস্থাপনা</p>
+      </div>
+
+      <div class="w-40 h-1 bg-white/10 rounded-full overflow-hidden">
+        <div id="splash-progress-bar" class="h-full bg-gradient-to-r from-amber-400 via-orange-500 to-cyan-400 w-0 transition-all duration-[2000ms] ease-out"></div>
+      </div>
+    </div>
+
+    <div class="space-y-1 pb-2">
+      <p class="text-[11px] uppercase tracking-widest text-slate-500 font-semibold">App Creator</p>
+      <p class="text-sm font-extrabold tracking-wide bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">
+        Fahim Rahman Mridul
+      </p>
+    </div>
+  </div>
+
+  <!-- ==================== TOP APP HEADER ==================== -->
+  <header class="sticky top-0 z-30 bg-[#0E0E1C]/95 backdrop-blur-md border-b border-white/10 px-4 py-3 shadow-lg">
+    <div class="flex items-center justify-between gap-2">
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-11 h-11 rounded-2xl bg-[#0B0B1A] border border-amber-500/30 p-1 shadow-[0_0_15px_rgba(245,158,11,0.2)] shrink-0 overflow-hidden flex items-center justify-center">
+          <img src="LOGO APP.jpg" alt="Logo" class="w-full h-full object-cover rounded-xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <svg style="display:none;" class="w-full h-full" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <path d="M54 56 L30 30 Q36 45 45 58 Z" fill="#F43F5E"/>
+            <path d="M56 56 Q72 32 88 18 Q84 34 68 56 Z" fill="#7C3AED"/>
+            <path d="M61 60 Q81 42 98 34 Q90 48 72 62 Z" fill="#2563EB"/>
+            <path d="M34 55 Q42 48 52 54 Q60 60 68 70 Q79 81 91 95 Q75 88 64 78 Q50 75 40 67 Q35 63 34 55 Z" fill="#F59E0B"/>
+          </svg>
+        </div>
+        <div class="min-w-0">
+          <h1 id="header-institute-name" class="text-lg font-bold leading-tight tracking-tight truncate bg-gradient-to-r from-amber-300 via-orange-300 to-cyan-300 bg-clip-text text-transparent">Coaching Manager</h1>
+          <p id="header-date-subtitle" class="bn-num-fix text-xs text-slate-300 font-medium truncate">আজকের তারিখ লোড হচ্ছে...</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button onclick="exportBackupWithFilePicker()" title="ব্যাকআপ নিন (.json)" class="w-9 h-9 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/30 flex items-center justify-center active:scale-95 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+        </button>
+        <label title="ব্যাকআপ রিকভারি করুন (.json)" class="cursor-pointer w-9 h-9 rounded-xl bg-blue-500/15 hover:bg-blue-500/25 text-blue-300 border border-blue-500/30 flex items-center justify-center active:scale-95 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+          <input type="file" id="top-restore-file-input" accept=".json,application/json" onchange="importBackupJSON(event)" class="hidden" />
+        </label>
+        <button onclick="openAddStudentModal()" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 active:scale-95 transition px-3.5 py-2 rounded-xl text-xs font-bold shadow-[0_4px_15px_rgba(245,158,11,0.35)] flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+          <span>নতুন শিক্ষার্থী</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dynamic Content Area -->
+  <main class="flex-1 px-4 pt-4 space-y-4">
+
+      <!-- ==================== TAB 1: DASHBOARD ==================== -->
+      <section id="view-dashboard" class="tab-view space-y-4">
+        <!-- Stat Cards -->
+        <div class="bg-[#131324] rounded-2xl p-4 shadow-lg border border-white/[0.07]">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-5 bg-gradient-to-b from-amber-400 to-orange-600 rounded-full inline-block"></span>
+              একনজরে সারসংক্ষেপ
+            </h2>
+            <span id="dash-current-month-badge" class="bn-num-fix text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-lg">চলতি মাস</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div onclick="switchTab('students')" class="cursor-pointer bg-gradient-to-br from-[#191B33] to-[#131426] border border-blue-500/25 p-3.5 rounded-2xl active:scale-98 transition">
+              <span class="text-xs font-semibold text-blue-300">মোট শিক্ষার্থী</span>
+              <p id="stat-total-students" class="bn-num-fix text-2xl font-bold text-white mt-1">০</p>
+              <p id="stat-total-batches" class="bn-num-fix text-[11px] text-slate-400 mt-0.5">সক্রিয় ব্যাচ: ০টি</p>
+            </div>
+
+            <div onclick="switchTab('attendance')" class="cursor-pointer bg-gradient-to-br from-[#132629] to-[#111B24] border border-cyan-500/25 p-3.5 rounded-2xl active:scale-98 transition">
+              <span class="text-xs font-semibold text-cyan-300">আজকের হাজিরা</span>
+              <div class="flex items-baseline gap-1.5 mt-1 flex-wrap">
+                <span id="stat-present-today" class="bn-num-fix text-lg font-bold text-cyan-300">০</span>
+                <span id="stat-absent-today" class="bn-num-fix text-xs font-bold text-rose-400">০ অনুপস্থিত</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-0.5">আজকের হিসাব</p>
+            </div>
+
+            <div onclick="switchTab('fees')" class="cursor-pointer bg-gradient-to-br from-[#261E14] to-[#1A1518] border border-amber-500/30 p-3.5 rounded-2xl active:scale-98 transition">
+              <span class="text-xs font-semibold text-amber-300">আদায়কৃত ফি</span>
+              <p id="stat-collected-fee" class="bn-num-fix text-xl font-bold text-white mt-1">৳ ০</p>
+              <p id="stat-paid-count" class="bn-num-fix text-[11px] text-amber-400 mt-0.5">০ জন পরিশোধ করেছে</p>
+            </div>
+
+            <div onclick="switchTab('fees')" class="cursor-pointer bg-gradient-to-br from-[#281522] to-[#1A1320] border border-rose-500/30 p-3.5 rounded-2xl active:scale-98 transition">
+              <span class="text-xs font-semibold text-rose-300">বকেয়া ফি (Due)</span>
+              <p id="stat-due-fee" class="bn-num-fix text-xl font-bold text-rose-400 mt-1">৳ ০</p>
+              <p id="stat-due-count" class="bn-num-fix text-[11px] text-rose-300 mt-0.5">০ জন বাকি আছে</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="bg-[#131324] rounded-2xl p-4 shadow-lg border border-white/[0.07]">
+          <h3 class="text-sm font-bold text-slate-200 mb-3">দ্রুত কাজ (Quick Actions)</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <button onclick="switchTab('attendance')" class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold text-sm shadow-md active:scale-95 transition">
+              <span class="text-left leading-tight">আজকের হাজিরা নিন</span>
+            </button>
+            <button onclick="openRoutineModal()" class="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-sm shadow-md active:scale-95 transition">
+              <span class="text-left leading-tight">রুটিন যোগ করুন</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Today's Routine Section -->
+        <div class="bg-[#131324] rounded-2xl p-4 shadow-lg border border-white/[0.07]">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-bold text-white">আজকের রুটিন</h3>
+              <span id="dash-today-day-badge" class="text-[11px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 px-2.5 py-0.5 rounded-lg">আজ</span>
+            </div>
+            <button onclick="openRoutineModal()" class="text-xs font-bold text-amber-400 hover:underline">+ রুটিন যোগ / পরিচালনা</button>
+          </div>
+          <div id="dash-today-routine-list" class="space-y-2.5"></div>
+        </div>
+
+        <!-- Max Due Students Leaderboard -->
+        <div class="bg-[#131324] rounded-2xl p-4 shadow-lg border border-rose-500/20">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2 h-4 bg-rose-500 rounded-full inline-block"></span>
+                বকেয়া বেতনের তালিকা
+              </h3>
+              <p class="text-[11px] text-slate-400 mt-0.5">সবচেয়ে বেশি বকেয়া থেকে ক্রমানুসারে সাজানো</p>
+            </div>
+            <span id="dash-due-leaderboard-count" class="bn-num-fix text-xs font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded-lg">০ জন</span>
+          </div>
+          <div id="dash-due-leaderboard-list" class="space-y-2.5"></div>
+        </div>
+      </section>
+
+      <!-- ==================== TAB 2: STUDENTS ==================== -->
+      <section id="view-students" class="tab-view hidden space-y-3">
+        <div class="bg-[#131324] p-3.5 rounded-2xl shadow-lg border border-white/[0.07] space-y-2.5">
+          <input type="text" id="student-search-input" oninput="renderStudents()" placeholder="নাম, রোল বা মোবাইল নম্বর দিয়ে খুঁজুন..." class="w-full pl-3.5 pr-4 py-2.5 bg-[#0B0B16] border border-white/10 text-slate-100 placeholder-slate-500 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 transition" />
+          <div class="grid grid-cols-3 gap-2">
+            <select id="student-class-filter" onchange="renderStudents()" class="bg-[#0B0B16] border border-white/10 text-slate-200 text-xs rounded-xl px-2.5 py-2">
+              <option value="ALL">সকল শ্রেণি</option>
+              <option value="১ম শ্রেণি">১ম শ্রেণি</option>
+              <option value="২য় শ্রেণি">২য় শ্রেণি</option>
+              <option value="৩য় শ্রেণি">৩য় শ্রেণি</option>
+              <option value="৪র্থ শ্রেণি">৪র্থ শ্রেণি</option>
+              <option value="৫ম শ্রেণি">৫ম শ্রেণি</option>
+              <option value="৬ষ্ঠ শ্রেণি">৬ষ্ঠ শ্রেণি</option>
+              <option value="৭ম শ্রেণি">৭ম শ্রেণি</option>
+              <option value="৮ম শ্রেণি">৮ম শ্রেণি</option>
+              <option value="৯ম শ্রেণি">৯ম শ্রেণি</option>
+              <option value="১০ম শ্রেণি">১০ম শ্রেণি</option>
+            </select>
+            <select id="student-year-filter" onchange="renderStudents()" class="bg-[#0B0B16] border border-white/10 text-slate-200 text-xs rounded-xl px-2.5 py-2">
+              <option value="ALL">শিক্ষাবর্ষ</option>
+              <option value="2025">২০২৫</option>
+              <option value="2026">২০২৬</option>
+              <option value="2027">২০২৭</option>
+            </select>
+            <select id="student-batch-filter" onchange="renderStudents()" class="bg-[#0B0B16] border border-white/10 text-slate-200 text-xs rounded-xl px-2.5 py-2">
+              <option value="ALL">সকল ব্যাচ</option>
+              <option value="সকালের ব্যাচ">সকালের ব্যাচ</option>
+              <option value="বিকালের ব্যাচ">বিকালের ব্যাচ</option>
+              <option value="সন্ধ্যার ব্যাচ">সন্ধ্যার ব্যাচ</option>
+            </select>
+          </div>
+          <div class="flex items-center justify-between pt-0.5">
+            <span class="text-[11px] text-slate-400">প্রোফাইল দেখতে শিক্ষার্থীর কার্ডে ক্লিক করুন</span>
+            <span id="student-filtered-count" class="bn-num-fix text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-lg">০ জন</span>
+          </div>
+        </div>
+
+        <div id="students-list-container" class="space-y-3"></div>
+      </section>
+
+      <!-- ==================== TAB 3: ATTENDANCE ==================== -->
+      <section id="view-attendance" class="tab-view hidden space-y-3">
+        <div class="bg-[#131324] p-4 rounded-2xl shadow-lg border border-white/[0.07] space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <h3 class="text-sm font-bold text-white">দৈনিক হাজিরা</h3>
+              <span id="attendance-day-label" class="text-[11px] font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 px-2.5 py-0.5 rounded-lg">বার</span>
+            </div>
+            <span class="text-xs text-cyan-400 font-semibold">রোল ক্রমানুসারে</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">তারিখ</label>
+              <input type="date" id="attendance-date-picker" onchange="loadAttendanceForDate()" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">শ্রেণি</label>
+              <select id="attendance-class-filter" onchange="renderAttendanceList()" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="ALL">সকল শ্রেণি</option>
+                <option value="১ম শ্রেণি">১ম শ্রেণি</option>
+                <option value="২য় শ্রেণি">২য় শ্রেণি</option>
+                <option value="৩য় শ্রেণি">৩য় শ্রেণি</option>
+                <option value="৪র্থ শ্রেণি">৪র্থ শ্রেণি</option>
+                <option value="৫ম শ্রেণি">৫ম শ্রেণি</option>
+                <option value="৬ষ্ঠ শ্রেণি">৬ষ্ঠ শ্রেণি</option>
+                <option value="৭ম শ্রেণি">৭ম শ্রেণি</option>
+                <option value="৮ম শ্রেণি">৮ম শ্রেণি</option>
+                <option value="৯ম শ্রেণি">৯ম শ্রেণি</option>
+                <option value="১০ম শ্রেণি">১০ম শ্রেণি</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">ব্যাচ ও বর্ষ</label>
+              <select id="attendance-batch-filter" onchange="renderAttendanceList()" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="ALL">সকল ব্যাচ</option>
+                <option value="সকালের ব্যাচ">সকালের ব্যাচ</option>
+                <option value="বিকালের ব্যাচ">বিকালের ব্যাচ</option>
+                <option value="সন্ধ্যার ব্যাচ">সন্ধ্যার ব্যাচ</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center justify-between bg-[#0B0B16] p-3 rounded-xl border border-white/[0.07]">
+            <div class="flex items-center gap-3">
+              <span class="bn-num-fix text-xs font-bold text-slate-300">মোট: <span id="att-count-total">০</span></span>
+              <span class="bn-num-fix text-xs font-bold text-emerald-400">উপস্থিত: <span id="att-count-present">০</span></span>
+              <span class="bn-num-fix text-xs font-bold text-rose-400">অনুপস্থিত: <span id="att-count-absent">০</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="attendance-students-container" class="space-y-2.5"></div>
+
+        <button onclick="saveAttendance()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold rounded-2xl text-sm shadow-lg active:scale-98 transition">
+          💾 হাজিরা সংরক্ষণ করুন
+        </button>
+      </section>
+
+      <!-- ==================== TAB 4: FEES ==================== -->
+      <section id="view-fees" class="tab-view hidden space-y-3">
+        <div class="bg-[#131324] p-4 rounded-2xl shadow-lg border border-white/[0.07] space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white">মাসিক ফি কালেকশন</h3>
+            <span id="fees-month-collected-badge" class="bn-num-fix text-xs font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-lg">আদায়: ৳ ০</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">মাস নির্বাচন</label>
+              <input type="month" id="fee-month-picker" onchange="renderFeesList()" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">শ্রেণি</label>
+              <select id="fee-class-filter" onchange="renderFeesList()" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="ALL">সকল শ্রেণি</option>
+                <option value="১ম শ্রেণি">১ম শ্রেণি</option>
+                <option value="২য় শ্রেণি">২য় শ্রেণি</option>
+                <option value="৩য় শ্রেণি">৩য় শ্রেণি</option>
+                <option value="৪র্থ শ্রেণি">৪র্থ শ্রেণি</option>
+                <option value="৫ম শ্রেণি">৫ম শ্রেণি</option>
+                <option value="৬ষ্ঠ শ্রেণি">৬ষ্ঠ শ্রেণি</option>
+                <option value="৭ম শ্রেণি">৭ম শ্রেণি</option>
+                <option value="৮ম শ্রেণি">৮ম শ্রেণি</option>
+                <option value="৯ম শ্রেণি">৯ম শ্রেণি</option>
+                <option value="১০ম শ্রেণি">১০ম শ্রেণি</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">ব্যাচ</label>
+              <select id="fee-batch-filter" onchange="renderFeesList()" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <option value="ALL">সকল ব্যাচ</option>
+                <option value="সকালের ব্যাচ">সকালের ব্যাচ</option>
+                <option value="বিকালের ব্যাচ">বিকালের ব্যাচ</option>
+                <option value="সন্ধ্যার ব্যাচ">সন্ধ্যার ব্যাচ</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <button type="button" id="fee-chip-ALL" onclick="setFeeStatusFilter('ALL')" class="fee-chip flex-1 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 transition">সবাই</button>
+            <button type="button" id="fee-chip-PAID" onclick="setFeeStatusFilter('PAID')" class="fee-chip flex-1 py-1.5 rounded-xl text-xs font-bold bg-[#0B0B16] text-slate-400 border border-white/10 transition">পরিশোধিত</button>
+            <button type="button" id="fee-chip-DUE" onclick="setFeeStatusFilter('DUE')" class="fee-chip flex-1 py-1.5 rounded-xl text-xs font-bold bg-[#0B0B16] text-slate-400 border border-white/10 transition">বকেয়া</button>
+          </div>
+        </div>
+
+        <div id="fees-students-container" class="space-y-2.5"></div>
+      </section>
+
+      <!-- ==================== TAB 5: SETTINGS ==================== -->
+      <section id="view-settings" class="tab-view hidden space-y-3">
+        <div class="bg-[#131324] p-4 rounded-2xl shadow-lg border border-white/[0.07] space-y-3">
+          <h3 class="text-sm font-bold text-white">অ্যাপ সেটিংস</h3>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">কোচিং / প্রতিষ্ঠানের নাম</label>
+            <div class="flex gap-2">
+              <input type="text" id="settings-institute-input" class="flex-1 bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
+              <button onclick="saveInstituteName()" class="px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs">সেভ</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#131324] p-4 rounded-2xl shadow-lg border border-white/[0.07] space-y-3">
+          <h3 class="text-sm font-bold text-white">ডাটা ব্যাকআপ ও রিস্টোর</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button onclick="exportBackupWithFilePicker()" class="py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+              <span>ব্যাকআপ ডাউনলোড (.json)</span>
+            </button>
+            <label class="cursor-pointer py-3 px-4 bg-blue-500/15 text-blue-300 border border-blue-500/30 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+              <span>ব্যাকআপ রিস্টোর করুন</span>
+              <input type="file" id="restore-file-input" accept=".json,application/json" onchange="importBackupJSON(event)" class="hidden" />
+            </label>
+          </div>
+        </div>
+      </section>
+
+  </main>
+
+  <!-- ==================== COPYRIGHT FOOTER ==================== -->
+  <footer class="fixed bottom-16 left-0 right-0 z-30 max-w-lg mx-auto text-center py-1.5 px-4 bg-[#0B0B16]/90 backdrop-blur-xs border-t border-white/[0.04]">
+    <p class="text-[11px] font-medium text-slate-400 tracking-wide">
+      © <span class="bn-num-fix">2026</span> <strong class="text-amber-400 font-bold">Fahim Rahman Mridul</strong> — All Rights Reserved.
+    </p>
+  </footer>
+
+  <!-- ==================== BOTTOM NAVIGATION BAR (5 TABS) ==================== -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 max-w-lg mx-auto bg-[#0E0E1C]/95 backdrop-blur-md border-t border-white/10 px-1.5 py-1.5 shadow-[0_-8px_25px_rgba(0,0,0,0.75)]">
+    <div class="grid grid-cols-5 gap-1">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-amber-400 bg-amber-500/15 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+        <span class="text-[11px] font-bold mt-0.5">ড্যাশবোর্ড</span>
+      </button>
+
+      <button onclick="switchTab('students')" id="nav-students" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+        <span class="text-[11px] font-semibold mt-0.5">শিক্ষার্থী</span>
+      </button>
+
+      <button onclick="switchTab('attendance')" id="nav-attendance" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span class="text-[11px] font-semibold mt-0.5">হাজিরা</span>
+      </button>
+
+      <button onclick="switchTab('fees')" id="nav-fees" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+        <span class="text-[11px] font-semibold mt-0.5">ফি</span>
+      </button>
+
+      <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+        <span class="text-[11px] font-semibold mt-0.5">সেটিংস</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MODALS ==================== -->
+  <!-- Student Add/Edit Modal -->
+  <div id="student-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+    <div class="bg-[#151528] border border-white/10 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 id="student-modal-title" class="text-lg font-bold text-white">নতুন শিক্ষার্থী যোগ করুন</h3>
+        <button onclick="closeStudentModal()" class="w-8 h-8 rounded-full bg-white/10 text-slate-300 flex items-center justify-center">✕</button>
+      </div>
+
+      <form id="student-form" onsubmit="handleSaveStudent(event)" class="space-y-3">
+        <input type="hidden" id="student-edit-id" />
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">শিক্ষার্থীর ছবি</label>
+          <input type="file" id="student-photo-input" accept="image/*" class="w-full bg-[#0B0B16] border border-white/10 text-white text-xs rounded-xl p-2" />
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-2">
+            <label class="block text-xs font-bold text-slate-300 mb-1">শিক্ষার্থীর নাম *</label>
+            <input type="text" id="student-name-input" required placeholder="পূর্ণ নাম" class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">রোল *</label>
+            <input type="text" id="student-roll-input" required placeholder="১" class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">শ্রেণি *</label>
+            <select id="student-class-select" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm">
+              <option value="">শ্রেণি বাছাই</option>
+              <option value="১ম শ্রেণি">১ম শ্রেণি</option>
+              <option value="২য় শ্রেণি">২য় শ্রেণি</option>
+              <option value="৩য় শ্রেণি">৩য় শ্রেণি</option>
+              <option value="৪র্থ শ্রেণি">৪র্থ শ্রেণি</option>
+              <option value="৫ম শ্রেণি">৫ম শ্রেণি</option>
+              <option value="৬ষ্ঠ শ্রেণি">৬ষ্ঠ শ্রেণি</option>
+              <option value="৭ম শ্রেণি">৭ম শ্রেণি</option>
+              <option value="৮ম শ্রেণি">৮ম শ্রেণি</option>
+              <option value="৯ম শ্রেণি">৯ম শ্রেণি</option>
+              <option value="১০ম শ্রেণি">১০ম শ্রেণি</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">শিক্ষাবর্ষ *</label>
+            <select id="student-year-select" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm">
+              <option value="2026">২০২৬</option>
+              <option value="2025">২০২৫</option>
+              <option value="2027">২০২৭</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">পড়া শুরুর তারিখ *</label>
+            <input type="date" id="student-startdate-input" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">ব্যাচ *</label>
+            <select id="student-batch-select" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm">
+              <option value="">ব্যাচ বাছুন</option>
+              <option value="সকালের ব্যাচ">সকালের ব্যাচ</option>
+              <option value="বিকালের ব্যাচ">বিকালের ব্যাচ</option>
+              <option value="সন্ধ্যার ব্যাচ">সন্ধ্যার ব্যাচ</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">অভিভাবকের মোবাইল নম্বর (১১ ডিজিট) *</label>
+          <div class="flex gap-2">
+            <input type="tel" id="student-phone-input" required maxlength="11" pattern="[0-9]{11}" placeholder="01711223344" class="flex-1 bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm" />
+            <button type="button" onclick="pickContact()" class="px-3 bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-xl text-xs font-bold">কন্টাক্ট</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">মাসিক ফি (টাকা) *</label>
+          <input type="number" id="student-fee-input" required placeholder="১৫০০" class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm" />
+        </div>
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold rounded-xl text-sm shadow-md">
+          সংরক্ষণ করুন
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profile-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+    <div class="bg-[#151528] border border-white/10 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="text-lg font-bold text-white">শিক্ষার্থীর প্রোফাইল</h3>
+        <button onclick="closeProfileModal()" class="w-8 h-8 rounded-full bg-white/10 text-slate-300 flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="bg-[#0B0B16] p-4 rounded-2xl border border-white/10 flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div id="prof-avatar-box" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 text-slate-950 font-extrabold text-2xl flex items-center justify-center shrink-0 overflow-hidden">
+            <img id="prof-avatar-img" src="" alt="Photo" class="hidden w-full h-full object-cover" />
+            <span id="prof-avatar-letter">A</span>
+          </div>
+          <div class="min-w-0">
+            <h4 id="prof-name" class="text-base font-bold text-white truncate">নাম</h4>
+            <p id="prof-class-batch" class="text-xs text-cyan-400 font-semibold mt-0.5">শ্রেণি • ব্যাচ</p>
+            <p id="prof-roll-year" class="bn-num-fix text-[11px] text-slate-400 mt-0.5">রোল • শিক্ষাবর্ষ</p>
+          </div>
+        </div>
+        <div class="flex flex-col items-end shrink-0">
+          <button type="button" id="prof-status-toggle-btn" onclick="toggleStudentActiveStatus()" class="px-3 py-1.5 rounded-xl text-xs font-bold transition shadow-sm">অ্যাক্টিভ</button>
+          <span id="prof-status-hint" class="text-[10px] text-slate-400 mt-1">সক্রিয় আছে</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="bg-[#0B0B16] p-3 rounded-xl border border-white/[0.07]">
+          <span class="text-[11px] text-slate-400 block">মাসিক ফি</span>
+          <strong id="prof-monthly-fee" class="bn-num-fix text-base font-bold text-amber-400">৳ ০</strong>
+        </div>
+        <div class="bg-[#0B0B16] p-3 rounded-xl border border-white/[0.07]">
+          <span class="text-[11px] text-slate-400 block">পড়া শুরুর তারিখ</span>
+          <strong id="prof-start-date" class="bn-num-fix text-sm font-bold text-white">-</strong>
+        </div>
+        <div class="bg-[#0B0B16] p-3 rounded-xl border border-rose-500/25">
+          <span class="text-[11px] text-rose-300 block">মোট বকেয়া বেতন</span>
+          <strong id="prof-due-months" class="bn-num-fix text-sm font-bold text-rose-400">০ মাস (৳ ০)</strong>
+        </div>
+        <div class="bg-[#0B0B16] p-3 rounded-xl border border-cyan-500/25">
+          <span class="text-[11px] text-cyan-300 block">মোট উপস্থিতি</span>
+          <strong id="prof-attendance-stats" class="bn-num-fix text-sm font-bold text-cyan-300">০ দিন (০%)</strong>
+        </div>
+      </div>
+
+      <div class="bg-[#0B0B16] p-3.5 rounded-xl border border-rose-500/25 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-rose-300">কোন কোন মাসে কত টাকা বকেয়া আছে:</span>
+          <span id="prof-due-total-badge" class="bn-num-fix text-[11px] font-bold bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-md">৳ ০</span>
+        </div>
+        <div id="prof-due-months-breakdown" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <div class="bg-[#0B0B16] p-3 rounded-xl border border-white/[0.07] flex items-center justify-between">
+        <div>
+          <span class="text-[11px] text-slate-400 block">অভিভাবকের মোবাইল নম্বর</span>
+          <strong id="prof-phone" class="text-sm font-bold text-white tracking-wider">01700000000</strong>
+        </div>
+        <a id="prof-call-btn" href="tel:" class="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5">📞 ফোন দিন</a>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5 pt-1">
+        <button type="button" id="prof-edit-btn" class="py-2.5 bg-blue-500/15 text-blue-300 border border-blue-500/30 font-bold rounded-xl text-xs">প্রোফাইল এডিট</button>
+        <button type="button" id="prof-delete-btn" class="py-2.5 bg-rose-500/15 text-rose-400 border border-rose-500/30 font-bold rounded-xl text-xs">প্রোফাইল ডিলিট</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Routine Modal -->
+  <div id="routine-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+    <div class="bg-[#151528] border border-white/10 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl space-y-4 my-auto max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="text-lg font-bold text-white">রুটিন যোগ করুন ও পরিচালনা</h3>
+        <button onclick="closeRoutineModal()" class="w-8 h-8 rounded-full bg-white/10 text-slate-300 flex items-center justify-center">✕</button>
+      </div>
+
+      <form id="routine-form" onsubmit="handleSaveRoutine(event)" class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">শ্রেণি *</label>
+            <select id="rt-class" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2.5 text-sm">
+              <option value="">শ্রেণি বাছাই করুন</option>
+              <option value="১ম শ্রেণি">১ম শ্রেণি</option>
+              <option value="২য় শ্রেণি">২য় শ্রেণি</option>
+              <option value="৩য় শ্রেণি">৩য় শ্রেণি</option>
+              <option value="৪র্থ শ্রেণি">৪র্থ শ্রেণি</option>
+              <option value="৫ম শ্রেণি">৫ম শ্রেণি</option>
+              <option value="৬ষ্ঠ শ্রেণি">৬ষ্ঠ শ্রেণি</option>
+              <option value="৭ম শ্রেণি">৭ম শ্রেণি</option>
+              <option value="৮ম শ্রেণি">৮ম শ্রেণি</option>
+              <option value="৯ম শ্রেণি">৯ম শ্রেণি</option>
+              <option value="১০ম শ্রেণি">১০ম শ্রেণি</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">ব্যাচ *</label>
+            <select id="rt-batch" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3.5 py-2.5 text-sm">
+              <option value="">ব্যাচ বাছাই</option>
+              <option value="সকালের ব্যাচ">সকালের ব্যাচ</option>
+              <option value="বিকালের ব্যাচ">বিকালের ব্যাচ</option>
+              <option value="সন্ধ্যার ব্যাচ">সন্ধ্যার ব্যাচ</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">বিষয় (মাধ্যমিক সকল বিষয়) *</label>
+          <select id="rt-subject" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2.5 text-sm">
+            <option value="">বিষয় নির্বাচন করুন</option>
+            <option value="বাংলা ১ম পত্র">বাংলা ১ম পত্র</option>
+            <option value="বাংলা ২য় পত্র">বাংলা ২য় পত্র</option>
+            <option value="ইংরেজি ১ম পত্র">ইংরেজি ১ম পত্র</option>
+            <option value="ইংরেজি ২য় পত্র">ইংরেজি ২য় পত্র</option>
+            <option value="সাধারণ গণিত">সাধারণ গণিত</option>
+            <option value="উচ্চতর গণিত">উচ্চতর গণিত</option>
+            <option value="পদার্থবিজ্ঞান">পদার্থবিজ্ঞান</option>
+            <option value="রসায়ন">রসায়ন</option>
+            <option value="জীববিজ্ঞান">জীববিজ্ঞান</option>
+            <option value="তথ্য ও যোগাযোগ প্রযুক্তি (ICT)">তথ্য ও যোগাযোগ প্রযুক্তি (ICT)</option>
+            <option value="বাংলাদেশ ও বিশ্বপরিচয়">বাংলাদেশ ও বিশ্বপরিচয়</option>
+            <option value="বিজ্ঞান">বিজ্ঞান</option>
+            <option value="ইসলাম ও নৈতিক শিক্ষা">ইসলাম ও নৈতিক শিক্ষা</option>
+            <option value="হিসাববিজ্ঞান">হিসাববিজ্ঞান</option>
+            <option value="ফিন্যান্স ও ব্যাংকিং">ফিন্যান্স ও ব্যাংকিং</option>
+            <option value="ব্যবসায় উদ্যোগ">ব্যবসায় উদ্যোগ</option>
+            <option value="ভূগোল ও পরিবেশ">ভূগোল ও পরিবেশ</option>
+            <option value="বাংলাদেশের ইতিহাস ও বিশ্বসভ্যতা">বাংলাদেশের ইতিহাস ও বিশ্বসভ্যতা</option>
+            <option value="পৌরনীতি ও নাগরিকতা">পৌরনীতি ও নাগরিকতা</option>
+            <option value="কৃষি শিক্ষা">কৃষি শিক্ষা</option>
+            <option value="গার্হস্থ্য বিজ্ঞান">গার্হস্থ্য বিজ্ঞান</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">শুরুর সময় *</label>
+            <input type="time" id="rt-start-time" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">শেষের সময় *</label>
+            <input type="time" id="rt-end-time" required class="w-full bg-[#0B0B16] border border-white/10 text-white rounded-xl px-3 py-2 text-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1.5">সপ্তাহের ৭ দিন (কোন কোন বার পড়ানো হবে) *</label>
+          <div class="grid grid-cols-4 gap-1.5 bg-[#0B0B16] p-2.5 rounded-xl border border-white/10">
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="শনিবার" class="accent-amber-500" /> শনি</label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="রবিবার" class="accent-amber-500" /> রবি</label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="সোমবার" class="accent-amber-500" /> সোম</label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="মঙ্গলবার" class="accent-amber-500" /> মঙ্গল</label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="বুধবার" class="accent-amber-500" /> বুধ</label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="বৃহস্পতিবার" class="accent-amber-500" /> বৃহস্পতি</label>
+            <label class="flex items-center gap-1.5 text-xs text-slate-200"><input type="checkbox" name="rt-days" value="শুক্রবার" class="accent-amber-500" /> শুক্র</label>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold rounded-xl text-sm shadow-md">
+          + রুটিন সংরক্ষণ করুন
+        </button>
+      </form>
+
+      <div class="border-t border-white/10 pt-3 space-y-2">
+        <h4 class="text-xs font-bold text-slate-300">সংরক্ষিত সকল রুটিন তালিকা</h4>
+        <div id="all-routines-list" class="space-y-2 max-h-48 overflow-y-auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Confirmation Dialog Box -->
+  <div id="custom-confirm-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-[#151528] border border-white/10 w-full max-w-sm rounded-3xl p-5 shadow-2xl space-y-4 text-center">
+      <div class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center text-xl font-bold">!</div>
+      <div class="space-y-1">
+        <h3 id="custom-confirm-title" class="text-base font-bold text-white">নিশ্চিত করুন</h3>
+        <p id="custom-confirm-message" class="text-xs text-slate-300">আপনি কি এটি করতে চান?</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2 pt-2">
+        <button type="button" id="custom-confirm-cancel-btn" class="py-2.5 bg-white/10 text-slate-300 font-bold rounded-xl text-xs">বাতিল</button>
+        <button type="button" id="custom-confirm-ok-btn" class="py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 text-slate-950 font-bold rounded-xl text-xs">নিশ্চিত</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-container" class="fixed top-20 left-1/2 -translate-x-1/2 z-[150] pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4">
+    <div class="bg-[#1C1C35] border border-amber-500/40 text-white px-4 py-2.5 rounded-2xl shadow-2xl flex items-center gap-2.5">
+      <span id="toast-icon">✅</span>
+      <span id="toast-msg" class="text-xs font-bold">সফল হয়েছে</span>
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    const STORAGE_KEY = 'coaching_manager_pro_db_v7';
+    const bnMonths = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+
+    let appState = {
+      instituteName: 'Coaching Manager',
+      students: [],
+      attendance: {},
+      fees: {},
+      routines: []
+    };
+
+    let activeProfileStudentId = null;
+    const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    
+    function toBnNum(num) {
+      return String(num).replace(/\d/g, d => bnDigits[d]);
+    }
+
+    const bnWeekDays = ['রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার', 'শুক্রবার', 'শনিবার'];
+    
+    function getTodayDayNameBn() {
+      return bnWeekDays[new Date().getDay()];
+    }
+
+    function getTodayISO() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getCurrentMonthISO() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+    }
+
+    function formatMonthKeyBn(mKey) {
+      if (!mKey || !mKey.includes('-')) return mKey;
+      const [y, m] = mKey.split('-');
+      const mIdx = parseInt(m, 10) - 1;
+      return `${bnMonths[mIdx] || m}, ${toBnNum(y)}`;
+    }
+
+    function formatDateBnReadable(isoDate) {
+      if (!isoDate) return '';
+      const parts = isoDate.split('-');
+      if (parts.length !== 3) return isoDate;
+      return `${toBnNum(parts[2])} ${bnMonths[parseInt(parts[1], 10) - 1] || parts[1]}, ${toBnNum(parts[0])}`;
+    }
+
+    function formatTime12hBn(time24) {
+      if (!time24) return '';
+      const [hStr, mStr] = time24.split(':');
+      let h = parseInt(hStr, 10);
+      let period = 'সকাল';
+      if (h >= 12 && h < 16) period = 'দুপুর';
+      else if (h >= 16 && h < 18) period = 'বিকাল';
+      else if (h >= 18 && h < 20) period = 'সন্ধ্যা';
+      else if (h >= 20 || h < 4) period = 'রাত';
+
+      const h12 = h % 12 === 0 ? 12 : h % 12;
+      return `${period} ${toBnNum(h12)}:${toBnNum(mStr)}`;
+    }
+
+    function hideSplashScreen() {
+      const splash = document.getElementById('splash-screen');
+      if (!splash || splash.dataset.hidden === 'true') return;
+      splash.dataset.hidden = 'true';
+      splash.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => splash.classList.add('hidden'), 500);
+    }
+
+    function updateHeaderInfo() {
+      const now = new Date();
+      const dayName = bnWeekDays[now.getDay()];
+      const dayNum = toBnNum(now.getDate());
+      const monthName = bnMonths[now.getMonth()];
+      const yearNum = toBnNum(now.getFullYear());
+      const dateStr = `${dayName}, ${dayNum} ${monthName} ${yearNum}`;
+
+      const sub = document.getElementById('header-date-subtitle');
+      if (sub) sub.textContent = dateStr;
+
+      const instNameEl = document.getElementById('header-institute-name');
+      if (instNameEl) instNameEl.textContent = appState.instituteName || 'Coaching Manager';
+    }
+
+    function showToast(msg, icon = '✅') {
+      const toast = document.getElementById('toast-container');
+      document.getElementById('toast-msg').textContent = msg;
+      document.getElementById('toast-icon').textContent = icon;
+      toast.classList.remove('opacity-0', '-translate-y-4');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-4');
+      }, 2500);
+    }
+
+    function askConfirmation(title, message, onConfirm) {
+      document.getElementById('custom-confirm-title').textContent = title;
+      document.getElementById('custom-confirm-message').textContent = message;
+      const modal = document.getElementById('custom-confirm-modal');
+      modal.classList.remove('hidden');
+
+      const okBtn = document.getElementById('custom-confirm-ok-btn');
+      const cancelBtn = document.getElementById('custom-confirm-cancel-btn');
+
+      const cleanup = () => {
+        modal.classList.add('hidden');
+        okBtn.onclick = null;
+        cancelBtn.onclick = null;
+      };
+
+      okBtn.onclick = () => { cleanup(); onConfirm(); };
+      cancelBtn.onclick = () => cleanup();
+    }
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      } catch (err) {}
+    }
+
+    function initData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          appState = {
+            instituteName: parsed.instituteName || 'Coaching Manager',
+            students: Array.isArray(parsed.students) ? parsed.students.map(s => ({ ...s, active: s.active !== false })) : [],
+            attendance: parsed.attendance || {},
+            fees: parsed.fees || {},
+            routines: Array.isArray(parsed.routines) ? parsed.routines : []
+          };
+        } else {
+          appState = {
+            instituteName: 'Coaching Manager',
+            students: [
+              { id: 'stu_101', name: 'তানভীর আহমেদ', roll: '১', studentClass: '৯ম শ্রেণি', academicYear: '2026', startDate: getTodayISO(), batch: 'সকালের ব্যাচ', monthlyFee: 1500, phone: '01711223344', photo: '', active: true },
+              { id: 'stu_102', name: 'সুমাইয়া আক্তার', roll: '২', studentClass: '৯ম শ্রেণি', academicYear: '2026', startDate: getTodayISO(), batch: 'সকালের ব্যাচ', monthlyFee: 1500, phone: '01819876543', photo: '', active: true }
+            ],
+            attendance: {},
+            fees: {},
+            routines: [
+              { id: 'rt_1', studentClass: '৯ম শ্রেণি', batch: 'সকালের ব্যাচ', subject: 'সাধারণ গণিত', startTime: '09:00', endTime: '10:30', days: ['শনিবার', 'রবিবার', 'সোমবার', 'মঙ্গলবার', 'বুধবার', 'বৃহস্পতিবার'] }
+            ]
+          };
+          saveData();
+        }
+      } catch (err) {}
+    }
+
+    function getActiveStudents() {
+      return appState.students.filter(s => s.active !== false);
+    }
+
+    function getStudentDueDetails(stu) {
+      const currentMonth = getCurrentMonthISO();
+      let startMonth = currentMonth;
+      if (stu.startDate && stu.startDate.length >= 7) {
+        let [sY, sM] = stu.startDate.slice(0, 7).split('-').map(Number);
+        sM += 1;
+        if (sM > 12) { sM = 1; sY += 1; }
+        startMonth = `${sY}-${String(sM).padStart(2, '0')}`;
+      }
+      if (startMonth > currentMonth) startMonth = currentMonth;
+
+      const [startY, startM] = startMonth.split('-').map(Number);
+      const [currY, currM] = currentMonth.split('-').map(Number);
+      const monthlyFee = Number(stu.monthlyFee || 0);
+
+      let y = startY;
+      let m = startM;
+      const unpaidMonthsList = [];
+      let totalDueAmount = 0;
+      let safetyCounter = 0;
+
+      while ((y < currY || (y === currY && m <= currM)) && safetyCounter < 120) {
+        const mKey = `${y}-${String(m).padStart(2, '0')}`;
+        const isPaid = Boolean(appState.fees[mKey] && appState.fees[mKey][stu.id]);
+        if (!isPaid && monthlyFee > 0) {
+          unpaidMonthsList.push({ monthKey: mKey, label: formatMonthKeyBn(mKey), amount: monthlyFee });
+          totalDueAmount += monthlyFee;
+        }
+        m++;
+        if (m > 12) { m = 1; y++; }
+        safetyCounter++;
+      }
+
+      return { dueMonths: unpaidMonthsList.length, totalDueAmount, unpaidMonthsList };
+    }
+
+    function getStudentAttendanceStats(stuId) {
+      let presentDays = 0;
+      let totalMarkedDays = 0;
+      Object.values(appState.attendance).forEach(dayRecord => {
+        if (dayRecord && dayRecord[stuId]) {
+          totalMarkedDays++;
+          if (dayRecord[stuId] === 'present') presentDays++;
+        }
+      });
+      const percentage = totalMarkedDays > 0 ? Math.round((presentDays / totalMarkedDays) * 100) : 0;
+      return { presentDays, totalMarkedDays, percentage };
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById(`view-${tabId}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(el => {
+        el.classList.remove('text-amber-400', 'bg-amber-500/15');
+        el.classList.add('text-slate-400');
+      });
+      const navBtn = document.getElementById(`nav-${tabId}`);
+      if (navBtn) {
+        navBtn.classList.remove('text-slate-400');
+        navBtn.classList.add('text-amber-400', 'bg-amber-500/15');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === 'dashboard') renderDashboard();
+      else if (tabId === 'students') renderStudents();
+      else if (tabId === 'attendance') loadAttendanceForDate();
+      else if (tabId === 'fees') renderFeesList();
+      else if (tabId === 'settings') {
+        document.getElementById('settings-institute-input').value = appState.instituteName || '';
+      }
+    }
+
+    function renderDashboard() {
+      updateHeaderInfo();
+      const activeStudents = getActiveStudents();
+      document.getElementById('stat-total-students').textContent = toBnNum(activeStudents.length);
+      const batches = ['সকালের ব্যাচ', 'বিকালের ব্যাচ', 'সন্ধ্যার ব্যাচ'];
+      const activeBatchesCount = batches.filter(b => activeStudents.some(s => s.batch === b)).length;
+      document.getElementById('stat-total-batches').textContent = `সক্রিয় ব্যাচ: ${toBnNum(activeBatchesCount)}টি`;
+
+      const today = getTodayISO();
+      const todayAtt = appState.attendance[today] || {};
+      let presentToday = 0;
+      let absentToday = 0;
+      activeStudents.forEach(s => {
+        if (todayAtt[s.id] === 'present') presentToday++;
+        else if (todayAtt[s.id] === 'absent') absentToday++;
+      });
+      document.getElementById('stat-present-today').textContent = `${toBnNum(presentToday)} উপস্থিত`;
+      document.getElementById('stat-absent-today').textContent = `${toBnNum(absentToday)} অনুপস্থিত`;
+
+      const thisMonth = getCurrentMonthISO();
+      document.getElementById('dash-current-month-badge').textContent = formatMonthKeyBn(thisMonth);
+      const monthFees = appState.fees[thisMonth] || {};
+      let collected = 0;
+      let due = 0;
+      let paidCount = 0;
+      let dueCount = 0;
+
+      activeStudents.forEach(s => {
+        if (monthFees[s.id]) {
+          collected += Number(monthFees[s.id].amount || 0);
+          paidCount++;
+        } else {
+          due += Number(s.monthlyFee || 0);
+          dueCount++;
+        }
+      });
+
+      document.getElementById('stat-collected-fee').textContent = `৳ ${toBnNum(collected)}`;
+      document.getElementById('stat-paid-count').textContent = `${toBnNum(paidCount)} জন পরিশোধ করেছে`;
+      document.getElementById('stat-due-fee').textContent = `৳ ${toBnNum(due)}`;
+      document.getElementById('stat-due-count').textContent = `${toBnNum(dueCount)} জন বাকি আছে`;
+
+      renderDashboardTodayRoutine();
+      renderDashboardDueLeaderboard();
+    }
+
+    function renderDashboardTodayRoutine() {
+      const todayName = getTodayDayNameBn();
+      const dayBadge = document.getElementById('dash-today-day-badge');
+      if (dayBadge) dayBadge.textContent = todayName;
+
+      const listEl = document.getElementById('dash-today-routine-list');
+      if (!listEl) return;
+
+      const todaysRoutines = (appState.routines || [])
+        .filter(r => Array.isArray(r.days) && r.days.includes(todayName))
+        .sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
+
+      if (todaysRoutines.length === 0) {
+        listEl.innerHTML = `<div class="bg-[#0B0B16] p-4 rounded-xl border border-white/[0.06] text-center space-y-2"><p class="text-xs text-slate-400">আজ (${todayName}) কোনো ক্লাসের রুটিন নেই।</p><button onclick="openRoutineModal()" class="px-3 py-1.5 bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold">+ রুটিন যোগ করুন</button></div>`;
+        return;
+      }
+
+      listEl.innerHTML = todaysRoutines.map(r => `
+        <div class="bg-[#0B0B16] p-3 rounded-xl border border-cyan-500/20 flex items-center justify-between gap-2.5">
+          <div class="min-w-0">
+            <span class="text-xs font-bold text-amber-300">${escapeHTML(r.subject)}</span>
+            <span class="text-[10px] font-bold bg-blue-500/15 text-blue-300 px-2 py-0.5 rounded-md">${escapeHTML(r.studentClass)}</span>
+            <p class="text-[11px] text-slate-400 mt-0.5">ব্যাচ: <strong class="text-slate-200">${escapeHTML(r.batch)}</strong></p>
+          </div>
+          <div class="text-right shrink-0 bg-cyan-500/10 border border-cyan-500/25 px-2.5 py-1.5 rounded-xl">
+            <span class="bn-num-fix text-[11px] font-bold text-cyan-300 block">${formatTime12hBn(r.startTime)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderDashboardDueLeaderboard() {
+      const listEl = document.getElementById('dash-due-leaderboard-list');
+      const countBadge = document.getElementById('dash-due-leaderboard-count');
+      if (!listEl) return;
+
+      const dueStudents = getActiveStudents()
+        .map(s => ({ student: s, dueInfo: getStudentDueDetails(s) }))
+        .filter(item => item.dueInfo.totalDueAmount > 0)
+        .sort((a, b) => b.dueInfo.totalDueAmount - a.dueInfo.totalDueAmount);
+
+      if (countBadge) countBadge.textContent = `${toBnNum(dueStudents.length)} জন`;
+
+      if (dueStudents.length === 0) {
+        listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-4 bg-[#0B0B16] rounded-xl border border-white/[0.06]">🎉 আলহামদুলিল্লাহ! কোনো শিক্ষার্থীর বেতন বকেয়া নেই।</p>`;
+        return;
+      }
+
+      listEl.innerHTML = dueStudents.map((item, idx) => {
+        const s = item.student;
+        const info = item.dueInfo;
+        return `
+          <div class="bg-[#0B0B16] p-3 rounded-xl border border-rose-500/25 space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <div onclick="openProfileModal('${s.id}')" class="cursor-pointer flex items-center gap-2.5 min-w-0 flex-1">
+                <span class="bn-num-fix w-6 h-6 rounded-lg bg-rose-500/20 text-rose-300 font-bold text-xs flex items-center justify-center shrink-0">${toBnNum(idx + 1)}</span>
+                <div class="min-w-0">
+                  <h4 class="font-bold text-white text-xs sm:text-sm truncate">${escapeHTML(s.name)}</h4>
+                  <p class="text-[11px] text-slate-400 truncate">${escapeHTML(s.studentClass)} • ${escapeHTML(s.batch)}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <div class="text-right">
+                  <span class="bn-num-fix text-sm font-extrabold text-rose-400 block">৳ ${toBnNum(info.totalDueAmount)}</span>
+                  <span class="bn-num-fix text-[10px] text-rose-300">${toBnNum(info.dueMonths)} মাস বাকি</span>
+                </div>
+                <a href="tel:${escapeHTML(s.phone)}" class="w-8 h-8 rounded-xl bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 flex items-center justify-center">📞</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStudents() {
+      const search = (document.getElementById('student-search-input').value || '').toLowerCase().trim();
+      const classFilter = document.getElementById('student-class-filter').value;
+      const yearFilter = document.getElementById('student-year-filter').value;
+      const batchFilter = document.getElementById('student-batch-filter').value;
+
+      let filtered = appState.students.filter(s => {
+        const matchClass = classFilter === 'ALL' || s.studentClass === classFilter;
+        const matchYear = yearFilter === 'ALL' || String(s.academicYear) === String(yearFilter);
+        const matchBatch = batchFilter === 'ALL' || s.batch === batchFilter;
+        const matchSearch = !search || s.name.toLowerCase().includes(search) || s.roll.toLowerCase().includes(search) || s.phone.includes(search);
+        return matchClass && matchYear && matchBatch && matchSearch;
+      });
+
+      filtered.sort((a, b) => (Number(a.roll) || 0) - (Number(b.roll) || 0));
+
+      document.getElementById('student-filtered-count').textContent = `${toBnNum(filtered.length)} জন`;
+      const container = document.getElementById('students-list-container');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="bg-[#131324] rounded-2xl p-8 text-center border border-white/[0.07]"><p class="text-slate-400 text-sm">কোনো শিক্ষার্থী পাওয়া যায়নি</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(s => {
+        const isActive = s.active !== false;
+        const avatar = s.photo
+          ? `<img src="${s.photo}" class="w-12 h-12 rounded-2xl object-cover border border-amber-400/30" />`
+          : `<div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 text-slate-950 font-extrabold text-base flex items-center justify-center shrink-0">${escapeHTML(s.name.charAt(0))}</div>`;
+
+        return `
+        <div class="bg-[#131324] p-4 rounded-2xl shadow-lg border ${isActive ? 'border-white/[0.07]' : 'border-rose-500/25 opacity-75'} flex flex-col gap-3">
+          <div onclick="openProfileModal('${s.id}')" class="cursor-pointer flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              ${avatar}
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <h3 class="font-bold text-white text-base">${escapeHTML(s.name)}</h3>
+                  <span class="text-[11px] font-bold bg-white/10 text-amber-300 px-2 py-0.5 rounded-md">রোল: ${toBnNum(s.roll)}</span>
+                  <span class="text-[10px] font-bold ${isActive ? 'bg-emerald-500/15 text-emerald-300' : 'bg-rose-500/15 text-rose-400'} px-2 py-0.5 rounded-md">${isActive ? 'অ্যাক্টিভ' : 'ডিঅ্যাক্টিভ'}</span>
+                </div>
+                <p class="bn-num-fix text-xs text-cyan-400 mt-0.5">${escapeHTML(s.studentClass)} • ${escapeHTML(s.batch)}</p>
+                <p class="bn-num-fix text-xs text-slate-400 mt-0.5">ফি: <strong class="text-amber-300">৳ ${toBnNum(s.monthlyFee)}</strong> • 📞 ${escapeHTML(s.phone)}</p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-white/[0.07]">
+            <button onclick="openProfileModal('${s.id}')" class="flex-1 py-2 bg-amber-500/15 text-amber-300 border border-amber-500/25 font-bold rounded-xl text-xs">👤 প্রোফাইল</button>
+            <a href="tel:${escapeHTML(s.phone)}" class="px-3 py-2 bg-cyan-500/15 text-cyan-300 border border-cyan-500/25 font-bold rounded-xl text-xs">📞 কল</a>
+            <button onclick="deleteStudent('${s.id}')" class="px-3 py-2 bg-rose-500/15 text-rose-400 border border-rose-500/25 font-bold rounded-xl text-xs">মুছুন</button>
+          </div>
+        </div>
+      `;
+      }).join('');
+    }
+
+    function openAddStudentModal() {
+      document.getElementById('student-edit-id').value = '';
+      document.getElementById('student-modal-title').textContent = 'নতুন শিক্ষার্থী যোগ করুন';
+      document.getElementById('student-form').reset();
+      document.getElementById('student-startdate-input').value = getTodayISO();
+      document.getElementById('student-modal').classList.remove('hidden');
+    }
+
+    function openEditStudentModal(id) {
+      const stu = appState.students.find(s => s.id === id);
+      if (!stu) return;
+      document.getElementById('student-edit-id').value = stu.id;
+      document.getElementById('student-modal-title').textContent = 'শিক্ষার্থীর তথ্য এডিট করুন';
+      document.getElementById('student-name-input').value = stu.name;
+      document.getElementById('student-roll-input').value = stu.roll;
+      document.getElementById('student-class-select').value = stu.studentClass || '';
+      document.getElementById('student-year-select').value = stu.academicYear || '2026';
+      document.getElementById('student-startdate-input').value = stu.startDate || getTodayISO();
+      document.getElementById('student-batch-select').value = stu.batch || '';
+      document.getElementById('student-phone-input').value = stu.phone || '';
+      document.getElementById('student-fee-input').value = stu.monthlyFee || '';
+      document.getElementById('student-modal').classList.remove('hidden');
+    }
+
+    function closeStudentModal() {
+      document.getElementById('student-modal').classList.add('hidden');
+    }
+
+    async function pickContact() {
+      if ('contacts' in navigator && 'select' in navigator.contacts) {
+        try {
+          const contacts = await navigator.contacts.select(['tel'], { multiple: false });
+          if (contacts.length && contacts[0].tel.length) {
+            let phone = contacts[0].tel[0].replace(/\D/g, '');
+            if (phone.length > 11) phone = phone.slice(-11);
+            document.getElementById('student-phone-input').value = phone;
+            return;
+          }
+        } catch (ex) {}
+      }
+      showToast('মোবাইল নম্বরটি হাতে টাইপ করুন', 'ℹ️');
+    }
+
+    function handleSaveStudent(e) {
+      e.preventDefault();
+      const id = document.getElementById('student-edit-id').value;
+      const name = document.getElementById('student-name-input').value.trim();
+      const roll = document.getElementById('student-roll-input').value.trim();
+      const studentClass = document.getElementById('student-class-select').value;
+      const academicYear = document.getElementById('student-year-select').value;
+      const startDate = document.getElementById('student-startdate-input').value;
+      const batch = document.getElementById('student-batch-select').value;
+      const phone = document.getElementById('student-phone-input').value.trim();
+      const monthlyFee = Number(document.getElementById('student-fee-input').value) || 0;
+      const photoInput = document.getElementById('student-photo-input');
+
+      if (phone.length !== 11) {
+        showToast('মোবাইল নম্বর অবশ্যই ১১ ডিজিটের হতে হবে!', '⚠️');
+        return;
+      }
+
+      const finishSave = (photoUrl) => {
+        if (id) {
+          const idx = appState.students.findIndex(s => s.id === id);
+          if (idx !== -1) {
+            const existingActive = appState.students[idx].active !== false;
+            appState.students[idx] = { id, name, roll, studentClass, academicYear, startDate, monthlyFee, batch, phone, photo: photoUrl || appState.students[idx].photo, active: existingActive };
+            showToast('শিক্ষার্থীর তথ্য আপডেট হয়েছে!');
+          }
+        } else {
+          const newStudent = { id: 'stu_' + Date.now(), name, roll, studentClass, academicYear, startDate, monthlyFee, batch, phone, photo: photoUrl || '', active: true };
+          appState.students.unshift(newStudent);
+          showToast('নতুন শিক্ষার্থী যোগ করা হয়েছে!');
+        }
+        saveData();
+        closeStudentModal();
+        renderDashboard();
+        renderStudents();
+      };
+
+      if (photoInput.files && photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(uploadEvent) { finishSave(uploadEvent.target.result); };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        finishSave(null);
+      }
+    }
+
+    function deleteStudent(id) {
+      askConfirmation('শিক্ষার্থী ডিলিট', 'আপনি কি এই শিক্ষার্থীকে মুছে ফেলতে চান?', () => {
+        appState.students = appState.students.filter(s => s.id !== id);
+        saveData();
+        renderDashboard();
+        renderStudents();
+        showToast('শিক্ষার্থী মুছে ফেলা হয়েছে', '🗑️');
+      });
+    }
+
+    function openProfileModal(studentId) {
+      const stu = appState.students.find(s => s.id === studentId);
+      if (!stu) return;
+      activeProfileStudentId = studentId;
+
+      const isActive = stu.active !== false;
+      const avatarImg = document.getElementById('prof-avatar-img');
+      const avatarLetter = document.getElementById('prof-avatar-letter');
+      if (stu.photo) {
+        avatarImg.src = stu.photo;
+        avatarImg.classList.remove('hidden');
+        avatarLetter.classList.add('hidden');
+      } else {
+        avatarImg.classList.add('hidden');
+        avatarLetter.textContent = stu.name.charAt(0);
+        avatarLetter.classList.remove('hidden');
+      }
+
+      document.getElementById('prof-name').textContent = stu.name;
+      document.getElementById('prof-class-batch').textContent = `${stu.studentClass} • ${stu.batch}`;
+      document.getElementById('prof-roll-year').textContent = `রোল: ${toBnNum(stu.roll)} • শিক্ষাবর্ষ: ${toBnNum(stu.academicYear)}`;
+
+      const toggleBtn = document.getElementById('prof-status-toggle-btn');
+      if (isActive) {
+        toggleBtn.textContent = '✓ অ্যাক্টিভ';
+        toggleBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950';
+      } else {
+        toggleBtn.textContent = '✕ ডিঅ্যাক্টিভ';
+        toggleBtn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-600 text-white';
+      }
+
+      document.getElementById('prof-monthly-fee').textContent = `৳ ${toBnNum(stu.monthlyFee)}`;
+      document.getElementById('prof-start-date').textContent = stu.startDate || '-';
+
+      const dueInfo = getStudentDueDetails(stu);
+      document.getElementById('prof-due-months').textContent = `${toBnNum(dueInfo.dueMonths)} মাস (৳ ${toBnNum(dueInfo.totalDueAmount)})`;
+      document.getElementById('prof-due-total-badge').textContent = `মোট: ৳ ${toBnNum(dueInfo.totalDueAmount)}`;
+
+      const breakdownEl = document.getElementById('prof-due-months-breakdown');
+      if (dueInfo.unpaidMonthsList.length === 0) {
+        breakdownEl.innerHTML = `<span class="text-xs text-emerald-400 font-semibold">✓ কোনো মাসের বেতন বকেয়া নেই</span>`;
+      } else {
+        breakdownEl.innerHTML = dueInfo.unpaidMonthsList.map(m => `<span class="bn-num-fix text-[11px] font-bold bg-rose-500/15 text-rose-200 border border-rose-500/30 px-2.5 py-1 rounded-lg">${escapeHTML(m.label)}: ৳ ${toBnNum(m.amount)}</span>`).join('');
+      }
+
+      const attStats = getStudentAttendanceStats(stu.id);
+      document.getElementById('prof-attendance-stats').textContent = `${toBnNum(attStats.presentDays)} দিন (${toBnNum(attStats.percentage)}%)`;
+
+      document.getElementById('prof-phone').textContent = stu.phone;
+      document.getElementById('prof-call-btn').setAttribute('href', `tel:${stu.phone}`);
+
+      document.getElementById('prof-edit-btn').onclick = () => { closeProfileModal(); openEditStudentModal(stu.id); };
+      document.getElementById('prof-delete-btn').onclick = () => { closeProfileModal(); deleteStudent(stu.id); };
+
+      document.getElementById('profile-modal').classList.remove('hidden');
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').classList.add('hidden');
+      activeProfileStudentId = null;
+    }
+
+    function toggleStudentActiveStatus() {
+      if (!activeProfileStudentId) return;
+      const idx = appState.students.findIndex(s => s.id === activeProfileStudentId);
+      if (idx === -1) return;
+      appState.students[idx].active = !(appState.students[idx].active !== false);
+      saveData();
+      openProfileModal(activeProfileStudentId);
+      renderStudents();
+      renderDashboard();
+    }
+
+    function openRoutineModal() {
+      document.getElementById('routine-form').reset();
+      renderAllRoutinesList();
+      document.getElementById('routine-modal').classList.remove('hidden');
+    }
+
+    function closeRoutineModal() {
+      document.getElementById('routine-modal').classList.add('hidden');
+    }
+
+    function handleSaveRoutine(e) {
+      e.preventDefault();
+      const studentClass = document.getElementById('rt-class').value;
+      const batch = document.getElementById('rt-batch').value;
+      const subject = document.getElementById('rt-subject').value;
+      const startTime = document.getElementById('rt-start-time').value;
+      const endTime = document.getElementById('rt-end-time').value;
+      const selectedDays = Array.from(document.querySelectorAll('input[name="rt-days"]:checked')).map(cb => cb.value);
+
+      if (!studentClass || !batch || !subject || !startTime || !endTime || selectedDays.length === 0) {
+        showToast('সব তথ্য ও কমপক্ষে একটি বার সিলেক্ট করুন!', '⚠️');
+        return;
+      }
+
+      if (!Array.isArray(appState.routines)) appState.routines = [];
+      appState.routines.push({ id: 'rt_' + Date.now(), studentClass, batch, subject, startTime, endTime, days: selectedDays });
+      saveData();
+      renderAllRoutinesList();
+      renderDashboardTodayRoutine();
+      document.getElementById('routine-form').reset();
+      showToast('রুটিন সংরক্ষণ হয়েছে!');
+    }
+
+    function renderAllRoutinesList() {
+      const container = document.getElementById('all-routines-list');
+      if (!container) return;
+      const list = appState.routines || [];
+      if (list.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">কোনো রুটিন নেই</p>`;
+        return;
+      }
+      container.innerHTML = list.map(r => `
+        <div class="bg-[#0B0B16] p-2.5 rounded-xl border border-white/10 flex items-center justify-between gap-2">
+          <div>
+            <p class="text-xs font-bold text-amber-300">${escapeHTML(r.subject)} (${escapeHTML(r.studentClass)})</p>
+            <p class="bn-num-fix text-[11px] text-slate-300">${escapeHTML(r.batch)} | ${formatTime12hBn(r.startTime)}</p>
+          </div>
+          <button type="button" onclick="deleteRoutine('${r.id}')" class="px-2 py-1 bg-rose-500/15 text-rose-400 rounded-lg text-xs">মুছুন</button>
+        </div>
+      `).join('');
+    }
+
+    function deleteRoutine(id) {
+      appState.routines = (appState.routines || []).filter(r => r.id !== id);
+      saveData();
+      renderAllRoutinesList();
+      renderDashboardTodayRoutine();
+      showToast('রুটিন মুছে ফেলা হয়েছে');
+    }
+
+    function loadAttendanceForDate() {
+      const dateInput = document.getElementById('attendance-date-picker');
+      if (!dateInput.value) dateInput.value = getTodayISO();
+      const selectedDate = dateInput.value;
+
+      const dObj = new Date(selectedDate);
+      const dayName = bnWeekDays[dObj.getDay()];
+      document.getElementById('attendance-day-label').textContent = dayName;
+
+      draftAttendance = { ...(appState.attendance[selectedDate] || {}) };
+      renderAttendanceList();
+    }
+
+    let draftAttendance = {};
+    function renderAttendanceList() {
+      const batchFilter = document.getElementById('attendance-batch-filter').value;
+      const classFilter = document.getElementById('attendance-class-filter').value;
+      
+      let students = getActiveStudents().filter(s => {
+        const matchBatch = batchFilter === 'ALL' || s.batch === batchFilter;
+        const matchClass = classFilter === 'ALL' || s.studentClass === classFilter;
+        return matchBatch && matchClass;
+      });
+
+      students.sort((a, b) => (Number(a.roll) || 0) - (Number(b.roll) || 0));
+
+      let present = 0, absent = 0;
+      students.forEach(s => {
+        if (draftAttendance[s.id] === 'present') present++;
+        else if (draftAttendance[s.id] === 'absent') absent++;
+      });
+      document.getElementById('att-count-total').textContent = toBnNum(students.length);
+      document.getElementById('att-count-present').textContent = toBnNum(present);
+      document.getElementById('att-count-absent').textContent = toBnNum(absent);
+
+      const container = document.getElementById('attendance-students-container');
+      if (students.length === 0) {
+        container.innerHTML = `<div class="bg-[#131324] p-4 text-center rounded-2xl"><p class="text-xs text-slate-400">শিক্ষার্থী নেই</p></div>`;
+        return;
+      }
+
+      container.innerHTML = students.map(s => {
+        const status = draftAttendance[s.id];
+        const isPresent = status === 'present';
+        const isAbsent = status === 'absent';
+        
+        const avatar = s.photo
+          ? `<img src="${s.photo}" class="w-10 h-10 rounded-xl object-cover border border-amber-400/30" />`
+          : `<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 text-slate-950 font-extrabold text-sm flex items-center justify-center shrink-0">${escapeHTML(s.name.charAt(0))}</div>`;
+
+        return `
+          <div class="bg-[#131324] p-3 rounded-xl border border-white/[0.07] flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              ${avatar}
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">${escapeHTML(s.name)}</h4>
+                <p class="bn-num-fix text-[11px] text-slate-400">রোল: ${toBnNum(s.roll)} • ${escapeHTML(s.studentClass)} • ${escapeHTML(s.batch)}</p>
+              </div>
+            </div>
+            <div class="flex gap-1.5 shrink-0">
+              <button onclick="setAtt('${s.id}', 'present')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${isPresent ? 'bg-cyan-500 text-slate-950' : 'bg-white/5 text-slate-300'}">উপস্থিত</button>
+              <button onclick="setAtt('${s.id}', 'absent')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${isAbsent ? 'bg-rose-600 text-white' : 'bg-white/5 text-slate-300'}">অনুপস্থিত</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setAtt(id, status) {
+      draftAttendance[id] = status;
+      renderAttendanceList();
+    }
+
+    function saveAttendance() {
+      const date = document.getElementById('attendance-date-picker').value || getTodayISO();
+      appState.attendance[date] = { ...draftAttendance };
+      saveData();
+      renderDashboard();
+      showToast('হাজিরা সংরক্ষিত হয়েছে!');
+    }
+
+    let currentFeeStatusFilter = 'ALL';
+    function setFeeStatusFilter(status) {
+      currentFeeStatusFilter = status;
+      document.querySelectorAll('.fee-chip').forEach(btn => {
+        btn.classList.remove('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-slate-950');
+        btn.classList.add('bg-[#0B0B16]', 'text-slate-400');
+      });
+      const active = document.getElementById(`fee-chip-${status}`);
+      if (active) active.classList.add('bg-gradient-to-r', 'from-amber-500', 'to-orange-600', 'text-slate-950');
+      renderFeesList();
+    }
+
+    function renderFeesList() {
+      const monthInput = document.getElementById('fee-month-picker');
+      if (!monthInput.value) monthInput.value = getCurrentMonthISO();
+      const monthKey = monthInput.value;
+      const batchFilter = document.getElementById('fee-batch-filter').value;
+      const classFilter = document.getElementById('fee-class-filter').value;
+      const monthRecords = appState.fees[monthKey] || {};
+      let collected = 0;
+
+      let filtered = getActiveStudents().filter(s => {
+        const matchBatch = batchFilter === 'ALL' || s.batch === batchFilter;
+        const matchClass = classFilter === 'ALL' || s.studentClass === classFilter;
+        
+        if (s.startDate && s.startDate.length >= 7) {
+          const joinMonth = s.startDate.slice(0, 7);
+          if (monthKey <= joinMonth) return false;
+        }
+
+        if (!matchBatch || !matchClass) return false;
+
+        const isPaid = Boolean(monthRecords[s.id]);
+        if (isPaid) collected += Number(monthRecords[s.id].amount || 0);
+
+        if (currentFeeStatusFilter === 'PAID') return isPaid;
+        if (currentFeeStatusFilter === 'DUE') return !isPaid;
+        return true;
+      });
+
+      filtered.sort((a, b) => (Number(a.roll) || 0) - (Number(b.roll) || 0));
+
+      document.getElementById('fees-month-collected-badge').textContent = `আদায়: ৳ ${toBnNum(collected)}`;
+      const container = document.getElementById('fees-students-container');
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="bg-[#131324] p-4 text-center rounded-2xl"><p class="text-xs text-slate-400">কোনো তথ্য নেই</p></div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(s => {
+        const rec = monthRecords[s.id];
+        const isPaid = Boolean(rec);
+        
+        const avatar = s.photo
+          ? `<img src="${s.photo}" class="w-10 h-10 rounded-xl object-cover border border-amber-400/30" />`
+          : `<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 text-slate-950 font-extrabold text-sm flex items-center justify-center shrink-0">${escapeHTML(s.name.charAt(0))}</div>`;
+
+        return `
+          <div class="bg-[#131324] p-3.5 rounded-xl border border-white/[0.07] flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              ${avatar}
+              <div class="min-w-0">
+                <h4 class="text-xs font-bold text-white truncate">${escapeHTML(s.name)}</h4>
+                <p class="bn-num-fix text-[11px] text-slate-400">রোল: ${toBnNum(s.roll)} • ${escapeHTML(s.studentClass)} • ফি: ৳ ${toBnNum(s.monthlyFee)}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              ${isPaid 
+                ? `<div>
+                     <button onclick="undoFeePayment('${s.id}', '${monthKey}')" class="px-3 py-1.5 bg-rose-500/15 text-rose-300 border border-rose-500/30 rounded-xl text-xs font-bold">পরিশোধিত</button>
+                     <span class="bn-num-fix block text-[10px] text-emerald-400 mt-1">তারিখ: ${formatDateBnReadable(rec.date)}</span>
+                   </div>` 
+                : `<button onclick="quickPayFee('${s.id}', '${monthKey}')" class="px-3 py-1.5 bg-amber-500 text-slate-950 rounded-xl text-xs font-bold">ফি নিন</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function quickPayFee(studentId, monthKey) {
+      const stu = appState.students.find(s => s.id === studentId);
+      if (!stu) return;
+      if (!appState.fees[monthKey]) appState.fees[monthKey] = {};
+      appState.fees[monthKey][studentId] = { amount: stu.monthlyFee || 0, date: getTodayISO(), note: 'নগদ' };
+      saveData();
+      renderFeesList();
+      renderDashboard();
+      showToast('ফি সফলভাবে গৃহীত হয়েছে!');
+    }
+
+    function undoFeePayment(studentId, monthKey) {
+      if (appState.fees[monthKey] && appState.fees[monthKey][studentId]) {
+        delete appState.fees[monthKey][studentId];
+        saveData();
+        renderFeesList();
+        renderDashboard();
+        showToast('বকেয়া সেকশনে ফিরিয়ে নেওয়া হয়েছে', '↩️');
+      }
+    }
+
+    function saveInstituteName() {
+      const val = document.getElementById('settings-institute-input').value.trim();
+      appState.instituteName = val || 'Coaching Manager';
+      saveData();
+      updateHeaderInfo();
+      showToast('প্রতিষ্ঠানের নাম সংরক্ষিত হয়েছে!');
+    }
+
+    async function exportBackupWithFilePicker() {
+      const dataStr = JSON.stringify(appState, null, 2);
+      const defaultFileName = `coaching-manager-backup-${getTodayISO()}.json`;
+
+      if (window.showSaveFilePicker) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: defaultFileName,
+            types: [{ description: 'JSON Backup', accept: { 'application/json': ['.json'] } }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(dataStr);
+          await writable.close();
+          showToast('ব্যাকআপ ফাইল সফলভাবে সংরক্ষিত হয়েছে!');
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = defaultFileName;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('ব্যাকআপ ডাউনলোড হয়েছে!');
+    }
+
+    function importBackupJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported || !Array.isArray(imported.students)) {
+            showToast('সঠিক ব্যাকআপ ফাইল নয়!', '❌');
+            return;
+          }
+          askConfirmation('ব্যাকআপ রিস্টোর করুন', 'বর্তমান ডেটা প্রতিস্থাপন করে রিস্টোর করতে চান?', () => {
+            appState = {
+              instituteName: imported.instituteName || 'Coaching Manager',
+              students: imported.students.map(s => ({ ...s, active: s.active !== false })),
+              attendance: imported.attendance || {},
+              fees: imported.fees || {},
+              routines: Array.isArray(imported.routines) ? imported.routines : []
+            };
+            saveData();
+            renderDashboard();
+            renderStudents();
+            showToast('ব্যাকআপ রিস্টোর হয়েছে!');
+          });
+        } catch (err) {
+          showToast('ফাইল পড়া যায়নি!', '❌');
+        }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const bar = document.getElementById('splash-progress-bar');
+        if (bar) bar.style.width = '100%';
+      }, 60);
+      setTimeout(() => hideSplashScreen(), 2200);
+
+      initData();
+      updateHeaderInfo();
+
+      document.getElementById('attendance-date-picker').value = getTodayISO();
+      document.getElementById('fee-month-picker').value = getCurrentMonthISO();
+
+      renderDashboard();
+    });
+  </script>
+</body>
+</html>
